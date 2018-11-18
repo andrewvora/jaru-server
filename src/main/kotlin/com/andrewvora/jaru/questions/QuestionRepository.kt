@@ -7,13 +7,4 @@ import org.springframework.data.repository.query.Param
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
-interface QuestionRepository : CrudRepository<Question, Int> {
-
-	@Query("SELECT q FROM question q WHERE questionId = :id")
-	fun find(@Param("id") id: String): Optional<Question>
-
-	@Modifying
-	@Transactional
-	@Query("DELETE FROM question q WHERE questionId = :id")
-	fun delete(@Param("id") id: String)
-}
+interface QuestionRepository : CrudRepository<Question, String>

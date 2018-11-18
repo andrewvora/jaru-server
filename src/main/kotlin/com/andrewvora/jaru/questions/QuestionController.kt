@@ -20,7 +20,7 @@ constructor(private val questionRepository: QuestionRepository) {
 			throw BadRequestException()
 		}
 
-		val questionResult = questionRepository.find(id)
+		val questionResult = questionRepository.findById(id)
 		return if (questionResult.isPresent) {
 			questionResult.get()
 		} else {
@@ -35,7 +35,7 @@ constructor(private val questionRepository: QuestionRepository) {
 			throw BadRequestException()
 		}
 
-		questionRepository.delete(id)
+		questionRepository.deleteById(id)
 	}
 
 	@PutMapping("/question/{questionId}")

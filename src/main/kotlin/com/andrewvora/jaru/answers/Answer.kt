@@ -13,8 +13,8 @@ data class Answer(
 		@Id
 		@Column(name = "answer_id", unique = true)
 		val answerId: String = UUID.randomUUID().toString(),
-		@Column(name = "text_id")
-		val textResId: String = "",
+		@Column(name = "text_res_name")
+		val textResName: String = "",
 		@JsonIgnore
 		@ManyToMany(
 				fetch = FetchType.EAGER,

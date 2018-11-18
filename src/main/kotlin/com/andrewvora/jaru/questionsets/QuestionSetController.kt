@@ -21,7 +21,7 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 			throw BadRequestException()
 		}
 
-		val result = questionSetRepository.find(setId)
+		val result = questionSetRepository.findById(setId)
 		return if (result.isPresent) {
 			result.get()
 		} else {
@@ -45,7 +45,7 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 			throw BadRequestException()
 		}
 
-		questionSetRepository.delete(id)
+		questionSetRepository.deleteById(id)
 	}
 
 	@PutMapping("/set/{setId}/add/{questionId}")
@@ -57,8 +57,8 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 			throw BadRequestException()
 		}
 
-		val matchingSet = questionSetRepository.find(setId)
-		val matchingQuestion = questionRepository.find(questionId)
+		val matchingSet = questionSetRepository.findById(setId)
+		val matchingQuestion = questionRepository.findById(questionId)
 		return if (matchingSet.isPresent && matchingQuestion.isPresent) {
 			val set = matchingSet.get()
 			val question = matchingQuestion.get()

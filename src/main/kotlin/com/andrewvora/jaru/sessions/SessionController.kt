@@ -16,7 +16,7 @@ constructor(private val sessionRepository: SessionRepository) {
 	@ResponseBody
 	fun get(@PathVariable("sessionId") sessionId: String?): Session {
 		val result = sessionId?.let { id ->
-			return@let sessionRepository.find(id)
+			return@let sessionRepository.findById(id)
 		}
 
 		return if (result?.isPresent == true) {
@@ -50,7 +50,7 @@ constructor(private val sessionRepository: SessionRepository) {
 			throw BadRequestException()
 		}
 
-		sessionRepository.deleteSession(sessionId)
+		sessionRepository.deleteById(sessionId)
 	}
 
 	@GetMapping("/session/recent")

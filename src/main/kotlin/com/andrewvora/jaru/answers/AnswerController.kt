@@ -18,7 +18,7 @@ constructor(private val answerRepository: AnswerRepository) {
 			throw BadRequestException()
 		}
 
-		val result = answerRepository.find(answerId)
+		val result = answerRepository.findById(answerId)
 		return if (result.isPresent) {
 			result.get()
 		} else {

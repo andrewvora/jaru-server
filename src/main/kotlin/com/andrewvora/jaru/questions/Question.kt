@@ -14,10 +14,10 @@ data class Question(
 		@Id
 		@Column(name = "question_id", unique = true)
 		val questionId: String = UUID.randomUUID().toString(),
-		@Column(name = "text_id")
-		val textResId: String = "",
-		@Column(name = "transcription_id")
-		val transcriptionResId: String = "",
+		@Column(name = "text_res_name")
+		val textResName: String = "",
+		@Column(name = "transcription_res_name")
+		val transcriptionResName: String = "",
 		@JsonIgnore
 		@ManyToMany(
 				fetch = FetchType.EAGER,

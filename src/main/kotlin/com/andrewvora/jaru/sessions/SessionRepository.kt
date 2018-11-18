@@ -10,19 +10,10 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import javax.websocket.server.PathParam
 
-interface SessionRepository : CrudRepository<Session, Int> {
-
-	@Query("SELECT s FROM session s WHERE s.sessionId = :sessionId")
-	fun find(@PathParam("sessionId") sessionId: String?): Optional<Session>
-
+interface SessionRepository : CrudRepository<Session, String> {
 	@Query("SELECT s FROM session s")
 	fun retrieveRecentSessions(pageable: Pageable = PageRequest.of(0, 100)): Optional<List<Session>?>
 
 	@Query("SELECT MAX(s.sequenceId) FROM session s")
 	fun currentSequenceId(): Optional<Long?>
-
-	@Modifying
-	@Transactional
-	@Query("DELETE FROM session s WHERE s.sessionId = :sessionId")
-	fun deleteSession(@Param("sessionId") sessionId: String)
 }

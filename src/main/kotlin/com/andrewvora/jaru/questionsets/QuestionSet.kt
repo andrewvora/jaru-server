@@ -15,10 +15,10 @@ data class QuestionSet(
 		val setId: String = UUID.randomUUID().toString(),
 		@Column(name = "difficulty")
 		val difficulty: Int = 0,
-		@Column(name = "title_id")
-		val titleResourceId: String = "",
-		@Column(name = "description_id")
-		val descriptionResourceId: String = "",
+		@Column(name = "title_res_name")
+		val titleResourceName: String = "",
+		@Column(name = "description_res_name")
+		val descriptionResourceName: String = "",
 		@ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
 		val questions: MutableList<Question> = mutableListOf()
 )
