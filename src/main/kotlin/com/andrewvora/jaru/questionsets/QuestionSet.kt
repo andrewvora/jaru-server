@@ -8,9 +8,9 @@ import javax.persistence.*
 @Entity(name = "question_set")
 data class QuestionSet(
 		@JsonIgnore
-		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		val id: Long = 0,
+		@Id
 		@Column(name = "set_id", unique = true)
 		val setId: String = UUID.randomUUID().toString(),
 		@Column(name = "difficulty")

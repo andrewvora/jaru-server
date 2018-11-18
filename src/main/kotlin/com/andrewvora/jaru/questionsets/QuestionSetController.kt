@@ -4,6 +4,7 @@ import com.andrewvora.jaru.exceptions.BadRequestException
 import com.andrewvora.jaru.exceptions.NotFoundException
 import com.andrewvora.jaru.questions.QuestionRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -35,6 +36,16 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 		}
 
 		return questionSetRepository.save(questionSet)
+	}
+
+	@DeleteMapping("/set/{setId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	fun delete(@PathVariable("setId") id: String?) {
+		if (id == null) {
+			throw BadRequestException()
+		}
+
+		questionSetRepository.delete(id)
 	}
 
 	@PutMapping("/set/{setId}/add/{questionId}")

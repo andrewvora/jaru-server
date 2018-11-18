@@ -9,9 +9,9 @@ import javax.persistence.*
 @Entity(name = "question")
 data class Question(
 		@JsonIgnore
-		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		val id: Long = 0,
+		@Id
 		@Column(name = "question_id", unique = true)
 		val questionId: String = UUID.randomUUID().toString(),
 		@Column(name = "text_id")
@@ -23,9 +23,9 @@ data class Question(
 				fetch = FetchType.EAGER,
 				cascade = [CascadeType.PERSIST, CascadeType.MERGE])
 		@JoinTable(
-				name = "question_set_question",
+				name = "question_set_questions",
 				joinColumns = [ JoinColumn(name = "question_set_set_id") ],
-				inverseJoinColumns = [ JoinColumn(name = "question_question_id") ]
+				inverseJoinColumns = [ JoinColumn(name = "questions_question_id") ]
 		)
 		val questionSets: MutableList<QuestionSet> = mutableListOf(),
 		@ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
