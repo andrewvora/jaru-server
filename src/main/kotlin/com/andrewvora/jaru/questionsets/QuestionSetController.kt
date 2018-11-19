@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/content/v1")
 class QuestionSetController
 @Autowired
 constructor(private val questionSetRepository: QuestionSetRepository,

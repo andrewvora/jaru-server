@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/content/v1")
 class TextResourceController
 @Autowired
 constructor(private val textResourceRepository: TextResourceRepository) {
