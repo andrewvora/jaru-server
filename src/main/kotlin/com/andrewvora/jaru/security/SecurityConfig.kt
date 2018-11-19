@@ -46,11 +46,7 @@ constructor(
 				?.authenticationEntryPoint(authEntryPoint)
 				?.and()
 				?.authorizeRequests()
-				?.antMatchers(HttpMethod.POST, "/content/v1/**")
-				?.hasRole("ADMIN")
-				?.antMatchers(HttpMethod.DELETE, "/content/v1/**")
-				?.hasRole("ADMIN")
-				?.antMatchers(HttpMethod.PUT, "/content/v1/**")
+				?.antMatchers("/content/v1/**")
 				?.hasRole("ADMIN")
 	}
 
