@@ -3,6 +3,7 @@ package com.andrewvora.jaru.questions
 import com.andrewvora.jaru.answers.Answer
 import com.andrewvora.jaru.questionsets.QuestionSet
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import javax.persistence.*
 
@@ -18,6 +19,11 @@ data class Question(
 		val textResName: String = "",
 		@Column(name = "transcription_res_name")
 		val transcriptionResName: String = "",
+		@Column(name = "correct_answer_id")
+		val correctAnswerId: String? = null,
+		@Column(name = "question_type")
+		@Enumerated(EnumType.STRING)
+		val questionType: QuestionType = QuestionType.UNKNOWN,
 		@JsonIgnore
 		@ManyToMany(
 				fetch = FetchType.EAGER,
@@ -30,4 +36,15 @@ data class Question(
 		val questionSets: MutableList<QuestionSet> = mutableListOf(),
 		@ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
 		val answers: MutableList<Answer> = mutableListOf()
-)
+) {
+	enum class QuestionType {
+		@JsonProperty("single_input")
+		SINGLE_INPUT,
+		@JsonProperty("multiple_choice")
+		MULTIPLE_CHOICE,
+		@JsonProperty("free_form")
+		FREE_FORM,
+		@JsonProperty("unknown")
+		UNKNOWN
+	}
+}
