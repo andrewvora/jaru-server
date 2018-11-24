@@ -47,6 +47,8 @@ constructor(
 				?.authorizeRequests()
 				?.antMatchers("/content/v1/**")
 				?.hasRole("ADMIN")
+				?.antMatchers("/api/v1/**")
+				?.permitAll()
 	}
 
 	@Bean

@@ -1,5 +1,5 @@
 package com.andrewvora.jaru.api.models
 
 data class LearningSetDto(
-		val id: String = ""
+		val questionSets: MutableList<QuestionSetDto> = mutableListOf()
 )

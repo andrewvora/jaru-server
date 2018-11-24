@@ -22,7 +22,7 @@ constructor(private val textResourceRepository: TextResourceRepository) {
 
 		val result = textResourceRepository.find(resId, locale)
 		return if (result.isPresent) {
-			result.get()
+			result.get().firstOrNull() ?: throw NotFoundException()
 		} else {
 			throw NotFoundException()
 		}
@@ -36,6 +36,18 @@ constructor(private val textResourceRepository: TextResourceRepository) {
 		}
 
 		return textResourceRepository.save(textResource)
+	}
+
+	@PostMapping("/text/batch")
+	@ResponseBody
+	fun post(@RequestBody textResources: Array<TextResource>?): List<TextResource> {
+		if (textResources == null) {
+			throw BadRequestException()
+		}
+
+		return textResources.filter {
+			textResourceRepository.save(it).id > 0
+		}
 	}
 
 	@DeleteMapping("/text/{resName}/{locale}")

@@ -38,12 +38,27 @@ data class Question(
 		val answers: MutableList<Answer> = mutableListOf()
 ) {
 	enum class QuestionType {
+		/**
+		 * Questions with only one or multiple answers.
+		 */
 		@JsonProperty("single_input")
 		SINGLE_INPUT,
+		/**
+		 * Questions with only one correct answer among many.
+		 */
 		@JsonProperty("multiple_choice")
 		MULTIPLE_CHOICE,
+		/**
+		 * Questions that may or may not have a real answer.
+		 * These aren't meant for practice and usually show guidance.
+		 * ex. "Try to speak this sentence"
+		 * ex. "How would you say this in Thai?" -> "Here's one way to say it: []"
+		 */
 		@JsonProperty("free_form")
 		FREE_FORM,
+		/**
+		 * Question type isn't defined. Likely indicating invalid data.
+		 */
 		@JsonProperty("unknown")
 		UNKNOWN
 	}
