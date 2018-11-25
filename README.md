@@ -12,7 +12,6 @@ To run it for production purposes, you need an `application.properties`.
 
 **application.properties**
 ```
-
 admin.username=username
 admin.password=password
 
@@ -21,7 +20,6 @@ spring.jpa.hibernate.ddl-auto=none
 spring.datasource.url=jdbc:mysql://something:port/jaru
 spring.datasource.username=username
 spring.datasource.password=password
-
 ```
 
 ## Running
