@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/content/v1")
 class TextResourceController
 @Autowired
-constructor(private val textResourceRepository: TextResourceRepository) {
+constructor(private val textResourceRepository: TextResourceRepository,
+			private val textResourceValidator: TextResourceValidator) {
 
 	@GetMapping("/text/{resName}/{locale}")
 	@ResponseBody
 	fun get(@PathVariable("resName") resId: String?,
 			@PathVariable("locale") locale: String?): TextResource {
-		if (resId == null || locale == null) {
+		if (resId.isNullOrBlank() || locale.isNullOrBlank()) {
 			throw BadRequestException()
 		}
 
@@ -31,7 +32,7 @@ constructor(private val textResourceRepository: TextResourceRepository) {
 	@PostMapping("/text")
 	@ResponseBody
 	fun post(@RequestBody textResource: TextResource?): TextResource {
-		if (textResource == null) {
+		if (textResource == null || !textResourceValidator.isValid(textResource)) {
 			throw BadRequestException()
 		}
 
@@ -45,6 +46,12 @@ constructor(private val textResourceRepository: TextResourceRepository) {
 			throw BadRequestException()
 		}
 
+		textResources.forEach {
+			if (!textResourceValidator.isValid(it)) {
+				throw BadRequestException()
+			}
+		}
+
 		return textResources.filter {
 			textResourceRepository.save(it).id > 0
 		}
@@ -54,7 +61,7 @@ constructor(private val textResourceRepository: TextResourceRepository) {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	fun delete(@PathVariable("resName") name: String?,
 			   @PathVariable("locale") locale: String?) {
-		if (name == null || locale == null) {
+		if (name.isNullOrBlank() || locale.isNullOrBlank()) {
 			throw BadRequestException()
 		}
 
