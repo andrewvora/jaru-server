@@ -46,6 +46,6 @@ class TextResourceValidatorTest {
 		assertFalse(validator.isValid(textResource.copy(resourceName = "")))
 		assertFalse(validator.isValid(textResource.copy(resourceName = " \n")))
 		assertFalse(validator.isValid(textResource.copy(text = "")))
-		assertFalse(validator.isValid(textResource.copy(text = "\n\t")))
+		assertFalse(validator.isValid(textResource.copy(text = " \n\t")))
 	}
 }

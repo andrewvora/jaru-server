@@ -21,15 +21,13 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 	@ResponseBody
 	fun fetchQuestionSets(@PathParam("locale") locale: String?): LearningSetDto {
 		return questionSetRepository.findAll()
-				.asSequence()
-				.toList()
 				.map {
 					questionSetConverter.toDto(it, locale ?: "en-US")
 				}
 				.let {
 					return@let LearningSetDto(
 							questionSets = it.toMutableList()
-					);
+					)
 				}
 	}
 }
