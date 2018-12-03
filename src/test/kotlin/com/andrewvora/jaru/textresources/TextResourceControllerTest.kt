@@ -5,11 +5,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.reset
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
@@ -116,7 +118,40 @@ class TextResourceControllerTest {
 		// when
 		val json = objectMapper.writeValueAsString(listOf(validResource, invalidResource))
 		mockMvc.perform(post("/content/v1/text")
-				.header(HttpHeaders.CONTENT_TYPE, "application/json").content(json))
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).content(json))
+				// then
 				.andExpect(status().isBadRequest)
+	}
+
+	@Test
+	fun `throw conflict if trying to create record that already exists`() {
+		// given
+		val textResource = TextResource(resourceName = "a", text = "b", localeId = "en-US")
+		val json = objectMapper.writeValueAsString(textResource)
+		whenever(validator.isValid(any() ?: textResource)).thenCallRealMethod()
+		whenever(repository.exists(anyString(), anyString())).thenReturn(true)
+
+		// when
+		mockMvc.perform(post("/content/v1/text")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.content(json))
+				// then
+				.andExpect(status().isConflict)
+
+	}
+
+	@Test
+	fun `throw conflict if batch create contains existing record`() {
+		// given
+		val resource1 = TextResource(resourceName = "a", text = "b", localeId = "en-US")
+		val resource2 = resource1.copy(resourceName = "b", text = "c")
+		whenever(validator.isValid(any() ?: resource2)).thenCallRealMethod()
+		whenever(repository.exists(anyString(), anyString())).thenReturn(true)
+
+		// when
+		val json = objectMapper.writeValueAsString(listOf(resource1, resource2))
+		mockMvc.perform(post("/content/v1/text/batch")
+				.header(HttpHeaders.CONTENT_TYPE, "application/json").content(json))
+				.andExpect(status().isConflict)
 	}
 }

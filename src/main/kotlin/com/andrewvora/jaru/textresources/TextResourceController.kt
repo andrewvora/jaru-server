@@ -1,5 +1,6 @@
 package com.andrewvora.jaru.textresources
 
+import com.andrewvora.jaru.exceptions.AlreadyExistsException
 import com.andrewvora.jaru.exceptions.BadRequestException
 import com.andrewvora.jaru.exceptions.NotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,6 +37,10 @@ constructor(private val textResourceRepository: TextResourceRepository,
 			throw BadRequestException()
 		}
 
+		if (textResourceRepository.exists(textResource.resourceName, textResource.localeId)) {
+			throw AlreadyExistsException()
+		}
+
 		return textResourceRepository.save(textResource)
 	}
 
@@ -49,6 +54,9 @@ constructor(private val textResourceRepository: TextResourceRepository,
 		textResources.forEach {
 			if (!textResourceValidator.isValid(it)) {
 				throw BadRequestException()
+			}
+			if (textResourceRepository.exists(it.resourceName, it.localeId)) {
+				throw AlreadyExistsException()
 			}
 		}
 

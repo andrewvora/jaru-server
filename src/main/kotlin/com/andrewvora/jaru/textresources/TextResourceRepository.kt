@@ -16,6 +16,13 @@ interface TextResourceRepository : CrudRepository<TextResource, Int> {
 			 @Param("locale") locale: String,
 			 pageable: Pageable = PageRequest.of(0, 1)): Optional<List<TextResource>>
 
+	/**
+	 * Necessary for text resources since there's no enforcement of the resourceName and localeId being unique.
+	 */
+	@Query("SELECT COUNT(tr) > 0 FROM text_resource tr WHERE resource_name = :name AND locale_id = :locale")
+	fun exists(@Param("name") resourceName: String,
+			   @Param("locale") locale: String): Boolean
+
 	@Transactional
 	@Modifying
 	@Query("DELETE FROM text_resource WHERE resource_name = :name AND locale_id = :locale")

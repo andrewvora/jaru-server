@@ -57,4 +57,29 @@ class TextResourceRepositoryTest {
 
 		assertFalse(repository.find("text1", "en-US").isPresent)
 	}
+
+	@Test
+	fun `identifies whether a particular text resource and locale already exist`() {
+		// given
+		val resource1 = TextResource(resourceName = "text1", text = "this is text1", localeId = "en-US")
+		entityManager.persist(resource1)
+
+		// when
+		val result = repository.exists(resourceName = resource1.resourceName, locale = resource1.localeId)
+
+		// then
+		assertTrue(result)
+	}
+
+	@Test
+	fun `identifies whether a particular text resource and locale does not exist`() {
+		// given
+		val resource1 = TextResource(resourceName = "text1", text = "this is text1", localeId = "en-US")
+
+		// when
+		val result = repository.exists(resourceName = resource1.resourceName, locale = resource1.localeId)
+
+		// then
+		assertFalse(result)
+	}
 }
