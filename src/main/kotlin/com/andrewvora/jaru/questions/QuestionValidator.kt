@@ -1,11 +1,15 @@
 package com.andrewvora.jaru.questions
 
+import com.andrewvora.jaru.answers.AnswerValidator
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class QuestionValidator {
+class QuestionValidator
+@Autowired
+constructor(private val answerValidator: AnswerValidator) {
 
-	fun isValid(question: Question): Boolean {
+	fun canBeInserted(question: Question): Boolean {
 		val hasCorrectAnswer = question.correctAnswerId.isNullOrBlank().not()
 		if (hasCorrectAnswer) {
 			question.answers.firstOrNull {
@@ -13,7 +17,14 @@ class QuestionValidator {
 			} ?: return false
 		}
 
-		return question.textResName.isNotEmpty() && question.transcriptionResName.isNotEmpty() &&
+		question.answers.forEach {
+			if (!answerValidator.canBeInserted(it)) {
+				return false
+			}
+		}
+
+		return question.textResName.isNotEmpty() &&
+				question.transcriptionResName.isNotEmpty() &&
 				question.questionId.isNotEmpty()
 	}
 }

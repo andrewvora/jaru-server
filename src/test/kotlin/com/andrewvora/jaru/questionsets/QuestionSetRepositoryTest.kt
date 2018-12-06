@@ -1,10 +1,8 @@
-package com.andrewvora.jaru.questionset
+package com.andrewvora.jaru.questionsets
 
 import com.andrewvora.jaru.DevProfile
 import com.andrewvora.jaru.answers.Answer
 import com.andrewvora.jaru.questions.Question
-import com.andrewvora.jaru.questionsets.QuestionSet
-import com.andrewvora.jaru.questionsets.QuestionSetRepository
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

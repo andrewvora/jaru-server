@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.*
 class QuestionSetController
 @Autowired
 constructor(private val questionSetRepository: QuestionSetRepository,
-			private val questionRepository: QuestionRepository) {
+			private val questionRepository: QuestionRepository,
+			private val questionSetValidator: QuestionSetValidator) {
 
 	@GetMapping("/set/{setId}")
 	@ResponseBody
 	fun get(@PathVariable("setId") setId: String?): QuestionSet {
-		if (setId == null) {
+		if (setId.isNullOrBlank()) {
 			throw BadRequestException()
 		}
 
@@ -30,18 +31,37 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 	}
 
 	@PostMapping("/set")
+	@ResponseBody
 	fun post(@RequestBody questionSet: QuestionSet?): QuestionSet {
-		if (questionSet == null) {
+		if (questionSet == null || !questionSetValidator.canBeInserted(questionSet)) {
 			throw BadRequestException()
 		}
 
 		return questionSetRepository.save(questionSet)
 	}
 
+	@PutMapping("/set/{setId}")
+	@ResponseBody
+	fun put(@PathVariable("setId") id: String?,
+			@RequestBody questionSet: QuestionSet?): QuestionSet {
+
+		val safeQuestionSet = if (questionSet?.setId.isNullOrBlank()) {
+			questionSet?.copy(setId = id ?: "")
+		} else {
+			questionSet
+		}
+
+		if (safeQuestionSet == null || id.isNullOrBlank() || !questionSetValidator.canBeInserted(safeQuestionSet)) {
+			throw BadRequestException()
+		}
+
+		return questionSetRepository.save(safeQuestionSet)
+	}
+
 	@DeleteMapping("/set/{setId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	fun delete(@PathVariable("setId") id: String?) {
-		if (id == null) {
+		if (id.isNullOrBlank()) {
 			throw BadRequestException()
 		}
 
@@ -53,7 +73,7 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 	fun addQuestion(@PathVariable("setId") setId: String?,
 					@PathVariable("questionId") questionId: String?): QuestionSet {
 
-		if (setId == null || questionId == null) {
+		if (setId.isNullOrBlank() || questionId.isNullOrBlank()) {
 			throw BadRequestException()
 		}
 
