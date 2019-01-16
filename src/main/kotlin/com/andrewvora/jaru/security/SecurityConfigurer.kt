@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.cors.CorsConfiguration
 import javax.servlet.http.HttpServletResponse
 
 @Configuration
@@ -33,6 +34,9 @@ constructor(
 	}
 
 	override fun configure(http: HttpSecurity?) {
+		http?.cors()?.configurationSource {
+			CorsConfiguration().applyPermitDefaultValues()
+		}
 		http?.csrf()?.disable()
 				?.sessionManagement()
 				?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

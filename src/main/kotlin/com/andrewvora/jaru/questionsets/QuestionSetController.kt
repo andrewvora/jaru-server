@@ -15,6 +15,13 @@ constructor(private val questionSetRepository: QuestionSetRepository,
 			private val questionRepository: QuestionRepository,
 			private val questionSetValidator: QuestionSetValidator) {
 
+	@GetMapping("/set/all")
+	@ResponseBody
+	fun getAll(): List<QuestionSet> {
+		val result = questionSetRepository.findAll()
+		return result.toList()
+	}
+
 	@GetMapping("/set/{setId}")
 	@ResponseBody
 	fun get(@PathVariable("setId") setId: String?): QuestionSet {
