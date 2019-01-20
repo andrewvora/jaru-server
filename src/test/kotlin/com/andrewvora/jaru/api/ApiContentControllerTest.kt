@@ -40,7 +40,7 @@ class ApiContentControllerTest {
 		whenever(questionSetRepository.findAll()).thenReturn(emptyList())
 
 		// when
-		mockMvc.perform(get("/api/v1/sets/all"))
+		mockMvc.perform(get("/api/v1/full"))
 				// then
 				.andExpect(status().isOk)
 				.andExpect(content().json(objectMapper.writeValueAsString(learningSetDto)))
@@ -61,7 +61,7 @@ class ApiContentControllerTest {
 		whenever(questionSetConverter.toDto(questionSet, "en-MX")).thenReturn(questionSetDto)
 
 		// when
-		mockMvc.perform(get("/api/v1/sets/all?locale=en-MX"))
+		mockMvc.perform(get("/api/v1/full?locale=en-MX"))
 				// then
 				.andExpect(status().isOk)
 				.andExpect(content().json(objectMapper.writeValueAsString(learningSetDto)))
@@ -74,7 +74,7 @@ class ApiContentControllerTest {
 		whenever(questionSetRepository.findAll()).thenReturn(mutableListOf(questionSet))
 
 		// when
-		mockMvc.perform(get("/api/v1/sets/all"))
+		mockMvc.perform(get("/api/v1/full"))
 				// then
 				.andExpect(status().isOk)
 
