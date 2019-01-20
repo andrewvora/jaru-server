@@ -17,9 +17,12 @@ class ApiContentController
 constructor(private val questionSetRepository: QuestionSetRepository,
 			private val questionSetConverter: QuestionSetConverter) {
 
-	@GetMapping("/v1/sets/all")
+	/**
+	 * Fetches a complete data set for mobile apps and SPAs
+	 */
+	@GetMapping("/v1/full")
 	@ResponseBody
-	fun fetchQuestionSets(@PathParam("locale") locale: String?): LearningSetDto {
+	fun fetchFullLearningSet(@PathParam("locale") locale: String?): LearningSetDto {
 		return questionSetRepository.findAll()
 				.map {
 					questionSetConverter.toDto(it, locale ?: "en-US")
