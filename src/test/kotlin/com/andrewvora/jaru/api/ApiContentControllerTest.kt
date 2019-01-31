@@ -1,11 +1,15 @@
 package com.andrewvora.jaru.api
 
+import com.andrewvora.jaru.api.mappers.GlossaryConverter
 import com.andrewvora.jaru.api.mappers.QuestionSetConverter
 import com.andrewvora.jaru.api.models.LearningSetDto
 import com.andrewvora.jaru.api.models.QuestionSetDto
+import com.andrewvora.jaru.glossary.Glossary
+import com.andrewvora.jaru.glossary.GlossaryRepository
 import com.andrewvora.jaru.questionsets.QuestionSet
 import com.andrewvora.jaru.questionsets.QuestionSetRepository
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verify
@@ -23,7 +27,8 @@ import org.mockito.Mockito.`when` as whenever
 @WebMvcTest(controllers = [ApiContentController::class], secure = false)
 class ApiContentControllerTest {
 
-	private val objectMapper = ObjectMapper()
+	@Autowired
+	private lateinit var objectMapper: ObjectMapper
 
 	@Autowired
 	private lateinit var mockMvc: MockMvc
@@ -32,12 +37,24 @@ class ApiContentControllerTest {
 	private lateinit var questionSetRepository: QuestionSetRepository
 	@MockBean
 	private lateinit var questionSetConverter: QuestionSetConverter
+	@MockBean
+	private lateinit var glossaryRepository: GlossaryRepository
+	@MockBean
+	private lateinit var glossaryConverter: GlossaryConverter
+
+	@Before
+	fun beforeEveryTest() {
+		whenever(glossaryRepository.findAll()).thenReturn(mutableListOf())
+	}
 
 	@Test
 	fun `returns empty array when no question sets are found`() {
 		// given
-		val learningSetDto = LearningSetDto(mutableListOf())
-		whenever(questionSetRepository.findAll()).thenReturn(emptyList())
+		val learningSetDto = LearningSetDto(
+				questionSets = mutableListOf(),
+				glossary = mutableListOf())
+
+		whenever(questionSetRepository.findAll()).thenReturn(mutableListOf())
 
 		// when
 		mockMvc.perform(get("/api/v1/full"))
@@ -56,7 +73,9 @@ class ApiContentControllerTest {
 				title = "hey",
 				description = "crazy questions",
 				questions = emptyList())
-		val learningSetDto = LearningSetDto(mutableListOf(questionSetDto))
+		val learningSetDto = LearningSetDto(
+				questionSets = mutableListOf(questionSetDto),
+				glossary = mutableListOf())
 		whenever(questionSetRepository.findAll()).thenReturn(mutableListOf(questionSet))
 		whenever(questionSetConverter.toDto(questionSet, "en-MX")).thenReturn(questionSetDto)
 
@@ -72,6 +91,8 @@ class ApiContentControllerTest {
 		// given
 		val questionSet = QuestionSet()
 		whenever(questionSetRepository.findAll()).thenReturn(mutableListOf(questionSet))
+		val glossary = Glossary()
+		whenever(glossaryRepository.findAll()).thenReturn(mutableListOf(glossary))
 
 		// when
 		mockMvc.perform(get("/api/v1/full"))
@@ -79,6 +100,7 @@ class ApiContentControllerTest {
 				.andExpect(status().isOk)
 
 		// then
+		verify(glossaryConverter).toDto(glossary, "en-US")
 		verify(questionSetConverter).toDto(questionSet, "en-US")
 	}
 }

@@ -12,8 +12,8 @@ data class Glossary(
 		@Id
 		@Column(name = "glossary_id", unique = true)
 		val glossaryId: String = UUID.randomUUID().toString(),
-		@Column(name = "text_id")
-		val textId: String = "",
+		@Column(name = "title_id")
+		val titleId: String = "",
 		@Column(name = "subtitle_id")
 		val subtitleId: String = "",
 		@OneToMany(cascade = [CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE])

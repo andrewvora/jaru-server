@@ -1,7 +1,9 @@
 package com.andrewvora.jaru.api
 
+import com.andrewvora.jaru.api.mappers.GlossaryConverter
 import com.andrewvora.jaru.api.mappers.QuestionSetConverter
 import com.andrewvora.jaru.api.models.LearningSetDto
+import com.andrewvora.jaru.glossary.GlossaryRepository
 import com.andrewvora.jaru.questionsets.QuestionSetRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,22 +17,28 @@ import javax.websocket.server.PathParam
 class ApiContentController
 @Autowired
 constructor(private val questionSetRepository: QuestionSetRepository,
-			private val questionSetConverter: QuestionSetConverter) {
+			private val questionSetConverter: QuestionSetConverter,
+			private val glossaryRepository: GlossaryRepository,
+			private val glossaryConverter: GlossaryConverter) {
 
 	/**
 	 * Fetches a complete data set for mobile apps and SPAs
 	 */
 	@GetMapping("/v1/full")
 	@ResponseBody
-	fun fetchFullLearningSet(@PathParam("locale") locale: String?): LearningSetDto {
-		return questionSetRepository.findAll()
+	fun fetchAllContentForLocale(@PathParam("locale") locale: String?): LearningSetDto {
+		val questionSets = questionSetRepository.findAll()
 				.map {
 					questionSetConverter.toDto(it, locale ?: "en-US")
 				}
-				.let {
-					return@let LearningSetDto(
-							questionSets = it.toMutableList()
-					)
+		val glossaries = glossaryRepository.findAll()
+				.map {
+					glossaryConverter.toDto(it, locale ?: "en-US")
 				}
+
+		return LearningSetDto(
+				questionSets = questionSets.toMutableList(),
+				glossary = glossaries.toMutableList()
+		)
 	}
 }
