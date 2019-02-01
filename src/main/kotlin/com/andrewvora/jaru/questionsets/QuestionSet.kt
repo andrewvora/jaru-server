@@ -21,6 +21,8 @@ data class QuestionSet(
 		val titleResourceName: String = "",
 		@Column(name = "description_res_name")
 		val descriptionResourceName: String = "",
+		@Column(name = "display_order")
+		val displayOrder: Int = 0,
 		@ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
 		val questions: MutableList<Question> = mutableListOf()
 ) {
