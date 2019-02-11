@@ -36,7 +36,17 @@ And make sure you have a database to point to defined in `application-dev.proper
 
 ### Production
 
-You need a valid database with the details laid out in `application.properties`.
+You need a valid database with the environment variables referenced in `application.properties`.
+
+If you don't care about maintaining your own table definitions, you can set
+
+```
+spring.jpa.hibernate.ddl-auto=create
+```
+
+in `application.properties` and allow JPA to construct the tables.
+
+Just be sure to change it back to none to avoid losing data.
 
 ### Testing
 
