@@ -52,17 +52,16 @@ constructor(private val textResourceRepository: TextResourceRepository,
 		}
 
 		textResources.forEach {
-			if (!textResourceValidator.isValid(it)) {
-				throw BadRequestException()
-			}
 			if (textResourceRepository.exists(it.resourceName, it.localeId)) {
 				throw AlreadyExistsException()
 			}
 		}
 
-		return textResources.filter {
-			textResourceRepository.save(it).id > 0
-		}
+		return textResources
+				.filterNot { it.text.isBlank() }
+				.filter {
+					textResourceRepository.save(it).id > 0
+				}
 	}
 
 	@DeleteMapping("/text/{resName}/{locale}")
