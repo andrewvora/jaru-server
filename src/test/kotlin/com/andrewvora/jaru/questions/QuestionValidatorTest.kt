@@ -51,41 +51,6 @@ class QuestionValidatorTest {
 	}
 
 	@Test
-	fun `does not require a correct answer to be specified`() {
-		assertTrue(questionValidator.canBeInserted(
-				Question(questionId = "question1",
-						textResName = "text1",
-						transcriptionResName = "text2",
-						correctAnswerId = null)
-		))
-	}
-
-	@Test
-	fun `correct answers must be within the provided answers`() {
-		assertTrue(questionValidator.canBeInserted(
-				Question(questionId = "question1",
-						textResName = "text1",
-						transcriptionResName = "text2",
-						correctAnswerId = "answer2",
-						answers = mutableListOf(
-								Answer(answerId = "answer1"),
-								Answer(answerId = "answer2")
-						))
-		))
-
-		assertFalse(questionValidator.canBeInserted(
-				Question(questionId = "question1",
-						textResName = "text1",
-						transcriptionResName = "text2",
-						correctAnswerId = "answer10",
-						answers = mutableListOf(
-								Answer(answerId = "answer1"),
-								Answer(answerId = "answer2")
-						))
-		))
-	}
-
-	@Test
 	fun `does not require answers to be provided`() {
 		assertTrue(questionValidator.canBeInserted(
 				Question(questionId = "question1",

@@ -19,8 +19,6 @@ data class Question(
 		val textResName: String = "",
 		@Column(name = "transcription_res_name")
 		val transcriptionResName: String = "",
-		@Column(name = "correct_answer_id")
-		val correctAnswerId: String? = null,
 		@Column(name = "question_type")
 		@Enumerated(EnumType.STRING)
 		val questionType: QuestionType = QuestionType.UNKNOWN,

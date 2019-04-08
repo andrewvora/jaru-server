@@ -10,13 +10,6 @@ class QuestionValidator
 constructor(private val answerValidator: AnswerValidator) {
 
 	fun canBeInserted(question: Question): Boolean {
-		val hasCorrectAnswer = question.correctAnswerId.isNullOrBlank().not()
-		if (hasCorrectAnswer) {
-			question.answers.firstOrNull {
-				it.answerId == question.correctAnswerId
-			} ?: return false
-		}
-
 		question.answers.forEach {
 			if (!answerValidator.canBeInserted(it)) {
 				return false

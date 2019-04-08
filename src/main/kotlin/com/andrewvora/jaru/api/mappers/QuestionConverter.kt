@@ -36,7 +36,6 @@ constructor(private val answerConverter: AnswerConverter,
 				type = question.questionType,
 				text = questionText,
 				transcript = transcriptionText,
-				answerId = question.correctAnswerId ?: "",
 				answers = answerDtos
 		)
 	}

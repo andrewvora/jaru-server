@@ -7,7 +7,6 @@ data class QuestionDto(
 		@JsonProperty("id") val id: String,
 		@JsonProperty("text") val text: String,
 		@JsonProperty("transcription") val transcript: String,
-		@JsonProperty("correctAnswerId") val answerId: String,
 		@JsonProperty("type") val type: Question.QuestionType,
 		@JsonProperty("answers") val answers: List<AnswerDto>
 )
